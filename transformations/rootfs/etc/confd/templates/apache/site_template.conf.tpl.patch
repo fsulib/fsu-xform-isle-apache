@@ -1,0 +1,38 @@
+--- isle-apache/rootfs/etc/confd/templates/apache/site_template.conf.tpl	2020-10-23 09:05:05.000000000 -0400
++++ temp-fsu-apache/rootfs/etc/confd/templates/apache/site_template.conf.tpl	2020-10-15 08:18:37.000000000 -0400
+@@ -22,21 +22,21 @@
+ 
+ 	AllowEncodedSlashes NoDecode
+ 	## Fedora
+-	ProxyPass /fedora/get http://fedora:8080/fedora/get
+-	ProxyPassReverse /fedora/get http://fedora:8080/fedora/get
+-	ProxyPass /fedora/services http://fedora:8080/fedora/services
+-	ProxyPassReverse /fedora/services http://fedora:8080/fedora/services
+-	ProxyPass /fedora/describe http://fedora:8080/fedora/describe
+-	ProxyPassReverse /fedora/describe http://fedora:8080/fedora/describe
+-	ProxyPass /fedora/risearch http://fedora:8080/fedora/risearch
+-	ProxyPassReverse /fedora/risearch http://fedora:8080/fedora/risearch
++	ProxyPass /fedora/get http://{{getv "/fedora/endpoint"}}:8080/fedora/get
++	ProxyPassReverse /fedora/get http://{{getv "/fedora/endpoint"}}:8080/fedora/get
++	ProxyPass /fedora/services http://{{getv "/fedora/endpoint"}}:8080/fedora/services
++	ProxyPassReverse /fedora/services http://{{getv "/fedora/endpoint"}}:8080/fedora/services
++	ProxyPass /fedora/describe http://{{getv "/fedora/endpoint"}}:8080/fedora/describe
++	ProxyPassReverse /fedora/describe http://{{getv "/fedora/endpoint"}}:8080/fedora/describe
++	ProxyPass /fedora/risearch http://{{getv "/fedora/endpoint"}}:8080/fedora/risearch
++	ProxyPassReverse /fedora/risearch http://{{getv "/fedora/endpoint"}}:8080/fedora/risearch
+ 	## Images
+-	ProxyPass /adore-djatoka http://image-services:8080/adore-djatoka
+-	ProxyPassReverse /adore-djatoka http://image-services:8080/adore-djatoka
+-	ProxyPass /iiif/2 http://image-services:8080/cantaloupe/iiif/2 nocanon
+-	ProxyPassReverse /iiif/2 http://image-services:8080/cantaloupe/iiif/2
+-	ProxyPass /cantaloupe/iiif/2 http://image-services:8080/cantaloupe/iiif/2 nocanon
+-	ProxyPassReverse /cantaloupe/iiif/2 http://image-services:8080/cantaloupe/iiif/2
++	ProxyPass /adore-djatoka http://{{getv "/image/services/endpoint"}}:8080/adore-djatoka
++	ProxyPassReverse /adore-djatoka http://{{getv "/image/services/endpoint"}}:8080/adore-djatoka
++	ProxyPass /iiif/2 http://{{getv "/image/services/endpoint"}}:8080/cantaloupe/iiif/2 nocanon
++	ProxyPassReverse /iiif/2 http://{{getv "/image/services/endpoint"}}:8080/cantaloupe/iiif/2
++	ProxyPass /cantaloupe/iiif/2 http://{{getv "/image/services/endpoint"}}:8080/cantaloupe/iiif/2 nocanon
++	ProxyPassReverse /cantaloupe/iiif/2 http://{{getv "/image/services/endpoint"}}:8080/cantaloupe/iiif/2
+ 	## New cantaloupe settings for testing April 2020
+ 	ProxyPassReverseCookiePath /cantaloupe/iiif/2 /iiif/2
+ 	ProxyPassReverseCookieDomain /cantaloupe/iiif/2 {{getv "/base/domain"}}

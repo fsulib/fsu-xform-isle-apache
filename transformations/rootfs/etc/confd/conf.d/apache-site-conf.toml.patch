@@ -1,0 +1,12 @@
+--- isle-apache/rootfs/etc/confd/conf.d/apache-site-conf.toml	2020-10-23 09:05:05.000000000 -0400
++++ temp-fsu-apache/rootfs/etc/confd/conf.d/apache-site-conf.toml	2020-10-15 08:18:37.000000000 -0400
+@@ -5,6 +5,8 @@
+ gid = 0
+ mode = "0644"
+ keys = [
+-  "/base/domain"
++  "/base/domain",
++  "/fedora/endpoint",
++  "/image/services/endpoint"
+ ]
+ reload_cmd = "a2ensite islandora-site.conf"
