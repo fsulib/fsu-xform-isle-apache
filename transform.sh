@@ -4,7 +4,6 @@
 # transformations over it and patch the files that require patching.
 
 [[ $CLONE_BASE ]] || CLONE_BASE=./isle-apache
-cd fsu-xform-isle-apache
 OWD="${PWD}"
 git clone https://github.com/Islandora-Collaboration-Group/isle-apache.git "${CLONE_BASE}"
 cp -r transformations/* "${CLONE_BASE}"
