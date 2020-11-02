@@ -16,7 +16,7 @@ cd ../templates/apache
 patch < site_template.conf.tpl.patch
 cd ../../../cont-init.d
 patch < 01-confd-site-enable.patch
-cd "${CLONE_BASE}"
+cd "${OWD}/${CLONE_BASE}"
 find . -type f -iname \*.patch -delete
 cd "${OWD}"
 exit 0
