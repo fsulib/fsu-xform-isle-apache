@@ -8,7 +8,7 @@ image_target=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | cut -d / -f 3)
 
 echo "image_target is $image_target"
 
-fsu_version="$(git tag | egrep '[^a-zA-Z]')
+fsu_version="$(git tag | egrep '[^a-zA-Z]')"
 echo "Building image..."
 cd isle-apache
 isle_release="$(git tag --points-at HEAD | cut -d - -f 2)"
