@@ -2,24 +2,20 @@
 
 # Pushing to ECR. Would rather do this as individual commands.
 
-IMAGE_TAG=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | cut -d / -f 3)
+image_target=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | cut -d / -f 3)
 
-[[ $IMAGE_TAG ]] || IMAGE_TAG=test
+[[ $image_target ]] || image_target=test
 
-echo "IMAGE_TAG is $IMAGE_TAG"
+echo "image_target is $image_target"
 
-fsu_commit="fsu-commit-$(git log --oneline | head -1 | cut -f 1 -d ' ')"
+fsu_version="$(git tag | egrep '[^a-zA-Z]')
 echo "Building image..."
 cd isle-apache
-isle_release="$(git tag --points-at HEAD)"
+isle_release="$(git tag --points-at HEAD | cut -d - -f 2)"
+IMAGE_TAG="${image_target}-${isle_release}.${fsu_version}"
 docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
 echo "Tagging image..."
 docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
 echo "Pushing image..."
 docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-echo "Adding tags..."
-docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$isle_release
-docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$isle_release
-docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$fsu_commit
-docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$fsu_commit
 
