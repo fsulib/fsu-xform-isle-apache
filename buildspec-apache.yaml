@@ -7,16 +7,11 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - echo "Build started on `date`."
-      - echo "Cloning and transforming isle-apache."
+      - echo "head_ref is $CODEBUILD_WEBHOOK_HEAD_REF"
       - /bin/bash transform.sh
-      - echo "Building image."
-      - cd isle-apache
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - /bin/bash build_tag_push.sh
+      - echo "Party Time"
   post_build:
     commands:
       - echo "Finished build on `date`."
-      - echo "Pushing to ECR."
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
 
