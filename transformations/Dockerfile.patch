@@ -1,8 +1,8 @@
 --- isle-apache/Dockerfile	2020-10-23 09:05:05.000000000 -0400
-+++ temp-fsu-apache/Dockerfile	2020-10-15 08:18:37.000000000 -0400
++++ Dockerfile	2020-11-19 12:24:11.000000000 -0500
 @@ -1,4 +1,4 @@
 -FROM adoptopenjdk/openjdk8:latest
-+FROM adoptopenjdk/openjdk8@sha256:5de53d93c8d7a75859ffe9b177dcc7a88ce1a506f77516a35e988dbd2dd92fa6
++FROM 840783682283.dkr.ecr.us-east-1.amazonaws.com/adoptopenjdk/openjdk8:working
  
  ENV INITRD=no \
      ISLANDORA_UID=${ISLANDORA_UID:-1000} \
