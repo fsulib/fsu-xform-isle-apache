@@ -14,6 +14,7 @@ patch < apache-site-conf.toml.patch
 patch < apache-sql.toml.patch
 cd ../templates/apache
 patch < site_template.conf.tpl.patch
+patch < apache2.conf.tpl.patch 
 cd ../../../cont-init.d
 patch < 01-confd-site-enable.patch
 cd "${OWD}/${CLONE_BASE}"
