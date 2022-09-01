@@ -1,9 +1,46 @@
---- isle-apache/Dockerfile	2021-04-06 15:50:45.000000000 -0400
-+++ Dockerfile	2021-04-06 15:51:56.000000000 -0400
+--- isle-apache/Dockerfile	2022-09-01 17:51:03.268235259 +0000
++++ Dockerfile	2022-09-01 17:56:42.127301664 +0000
 @@ -1,5 +1,5 @@
- # @see https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/8/jdk/ubuntu/Dockerfile.hotspot.releases.full
--FROM adoptopenjdk:8-jdk-hotspot
-+FROM 840783682283.dkr.ecr.us-east-1.amazonaws.com/adoptopenjdk/adoptopenjdk:8-jdk-hotspot
+ # @see https://github.com/adoptium/containers/blob/main/8/jdk/ubuntu/focal/Dockerfile.releases.full for newer supported java updates
+-FROM eclipse-temurin:8-jdk-focal
++FROM 840783682283.dkr.ecr.us-east-1.amazonaws.com/eclipse-temurin/eclipse-temurin:8-jdk-focal
  
  ENV INITRD=no \
      ISLANDORA_UID=${ISLANDORA_UID:-1000} \
+@@ -28,7 +28,8 @@
+     openssl \
+     openssh-client \
+     mysql-client\
+-    file" && \
++    file \
++    rsyslog" && \
+     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
+     apt-get update && \
+     apt-get install --no-install-recommends -y $GEN_DEP_PACKS && \
+@@ -62,7 +63,7 @@
+     KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
+     LD_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/lib:$LD_LIBRARY_PATH \
+     COMPOSER_ALLOW_SUPERUSER=1 \
+-    IMAGEMAGICK_VERSION=${IMAGEMAGICK_VERSION:-7.1.0.43} \
++    IMAGEMAGICK_VERSION=${IMAGEMAGICK_VERSION:-7.1.0-43} \
+     OPENJPEG_VERSION=${OPENJPEG_VERSION:-v2.5.0}
+ 
+ ## Apache, PHP, FFMPEG, and other Islandora Depends.
+@@ -195,7 +196,7 @@
+     ldconfig && \
+     ## ImageMagick latest
+     cd /tmp && \
+-    curl -O -L https://github.com/ImageMagick/ImageMagick/archive/$IMAGEMAGICK_VERSION.tar.gz && \
++    curl -O -L https://github.com/ImageMagick/ImageMagick/archive/refs/tags/$IMAGEMAGICK_VERSION.tar.gz && \
+     tar xf $IMAGEMAGICK_VERSION.tar.gz && \
+     cd ImageMagick-$IMAGEMAGICK_VERSION && \
+     ./configure --enable-hdri --with-quantum-depth=16 --without-magick-plus-plus --without-perl --with-rsvg && \
+@@ -232,6 +233,8 @@
+ # @see: Drush https://github.com/drush-ops/drush/tags
+ RUN useradd --comment 'Islandora User' --no-create-home -d /var/www/html --system --uid $ISLANDORA_UID --user-group -s /bin/bash islandora && \
+     chown -R islandora:www-data /var/www/html && \
++    ## FSULIB: rsyslog.conf tweak
++    sed -i -e '25s/^/#/' -e '43s/syslog/islandora/' -e '48s/syslog/islandora/' /etc/rsyslog.conf && \
+     ## Temporary directory for composer, fits, etc...
+     mkdir -p /tmp/build && \
+     cd /tmp/build/ && \
